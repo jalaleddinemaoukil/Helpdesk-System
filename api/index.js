@@ -6,11 +6,13 @@ import authRoutes from './routes/auth.route.js';
 
 dotenv.config();
 
-mongoose.connect(process.env.MONGO_URL).then(() => {
-    console.log('Connected to MongoDB')
-}).catch((err) => {
-    console.log(err)
-})
+mongoose.connect(process.env.MONGO_URL, {ssl: true})
+    .then(() => {
+        console.log('Connected to MongoDB')
+    })
+    .catch((err) => {
+        console.log(err)
+    })
 
 const app = express();
 
@@ -24,14 +26,4 @@ app.listen(3000, () => {
     console.log("Server listening on port 3000")
 });
 
-
-app.use((err, req, res, next) => {
-    const statusCode = err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
-    return res.status(statusCode).json({ 
-        success: false,
-        message,
-        statusCode,
-    });
-})
 
